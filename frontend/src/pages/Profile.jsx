@@ -22,7 +22,9 @@ const Profile = () => {
 
   return (
     <Layout showSidebar={true} showNavbar={true} showFooter={true}>
-      <h2>This is Profile Page</h2>
+     <div className="container">
+     <h2>This is Profile Page</h2>
+     </div>
     </Layout>
   );
 };

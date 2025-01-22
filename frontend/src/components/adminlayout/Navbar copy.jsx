@@ -15,8 +15,8 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbarr">
-      {/* <div className="navbar-left">
+    <nav className="navbar">
+      <div className="navbar-left">
         <ul className="navbar-links">
           <li><a href="/">Home</a></li>
           <li><a href="/about">About</a></li>
@@ -25,9 +25,9 @@ const Navbar = () => {
       </div>
       <div className="navbar-right">
         <div className="profile-container" onClick={toggleDropdown}>
-          {}
+          {/* Profile Image */}
           <img
-            src="https://www.w3schools.com/howto/img_avatar.png" 
+            src="https://www.w3schools.com/howto/img_avatar.png" // Replace with the actual profile image URL
             alt="Profile"
             className="profile-img"
           />
@@ -39,7 +39,7 @@ const Navbar = () => {
             </button>
           </div>
         )}
-      </div> */}
+      </div>
     </nav>
   );
 };

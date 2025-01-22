@@ -101,24 +101,22 @@ body {
 }
 
 /* Navbar */
-.layout-navbar {
+/* .layout-navbar {
   background-color: #2a3f54;
   color: white;
   padding: 10px;
   justify-content: space-between;
-}
+} */
 
 /* Sidebar */
 .layout-sidebar {
   background-color: #34495e;
   color: white;
   width: 250px;
-  height: calc(100vh - 60px); /* Adjust for header height */
   position: fixed;
-  top: 75px; /* Same as header height */
   left: 0;
   overflow-y: hidden;
-  padding: -15px;
+
 }
 
 /* Body Content */
@@ -127,7 +125,7 @@ body {
   margin-left: 250px; /* Sidebar width */
   flex-grow: 1;
   flex-direction: column;
-  padding: 20px;
+
 }
 
 /* Main Content */
