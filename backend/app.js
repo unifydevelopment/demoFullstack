@@ -1,16 +1,21 @@
+require('dotenv').config(); // Load environment variables
 const express = require('express');
 const bodyParser = require('body-parser');
-const cors = require('cors');
+
 const authRoutes = require('./routes/authRoutes');
-require('dotenv').config();
+const userRoutes = require('./routes/userRoutes');
 
 const app = express();
-app.use(cors());
+const PORT = process.env.PORT || 3000;
+
+// Middleware
 app.use(bodyParser.json());
 
 // Routes
-app.use('/api/users', authRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
 
-// Start the Server
-const PORT = process.env.PORT || 5001;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server running on ${process.env.BASE_URL}:${PORT}`);
+});
