@@ -71,3 +71,140 @@
 .logout-button:hover {
   background-color: #f5f5f5;
 }
+
+/* sidebar.css */
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px; /* Adjust as per your requirement */
+  height: 100%;
+  background-color: #2c3e50;
+  padding-top: 20px;
+  z-index: 1000; /* Increased z-index */
+  transition: all 0.3s ease;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar ul li {
+  padding: 10px 15px;
+}
+
+.sidebar ul li a {
+  color: white;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar ul li a:hover {
+  background-color: #1abc9c;
+}
+
+.sidebar .active {
+  background-color: #1abc9c;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 200px; /* Optional: adjust sidebar width for smaller screens */
+  }
+}
+
+
+/* General Header Styling */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+}
+
+.header-left h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
+.notification-icon {
+  margin-right: 20px;
+  cursor: pointer;
+  position: relative;
+}
+
+.profile-container {
+  cursor: pointer;
+  position: relative;
+}
+
+.profile-img {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 45px;
+  right: 0;
+  background-color: white;
+  color: black;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  padding: 10px 0;
+  width: 150px;
+}
+
+.logout-button {
+  background-color: transparent;
+  color: black;
+  border: none;
+  font-size: 16px;
+  width: 100%;
+  text-align: left;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  background-color: #f5f5f5;
+}
+
+/* Bell icon style */
+.notification-icon {
+  position: relative;
+  cursor: pointer;
+}
+
+/* Profile image and dropdown */
+.profile-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+}
+
+.profile-img {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+
+

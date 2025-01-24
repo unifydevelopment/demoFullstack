@@ -21,7 +21,7 @@ const Profile = () => {
   }, []);
 
   return (
-    <Layout showSidebar={true} showNavbar={true} showFooter={true}>
+    <Layout showHeader={true} showSidebar={true} showNavbar={true} showFooter={true}>
      <div className="container">
      <h2>This is Profile Page</h2>
      </div>

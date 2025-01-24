@@ -68,7 +68,7 @@ const Login = () => {
   };
 
   return (
-    <Layout showSidebar={false} showNavbar={false} showFooter={false}>
+    <Layout showHeader={false} showSidebar={false} showNavbar={false} showFooter={false}>
       <div className="login-container">
         <div className="login-form">
           <h2 className="login-title">Login</h2>

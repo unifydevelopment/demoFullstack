@@ -5,12 +5,17 @@ import Sidebar from '../components/adminlayout/Sidebar';
 import Footer from '../components/adminlayout/Footer';
 import Navbar from '../components/adminlayout/Navbar';
 
-const Layout = ({ children, showSidebar, showNavbar, showFooter }) => {
+const Layout = ({ children, showHeader, showSidebar, showNavbar, showFooter }) => {
   return (
     <div className="layout-container">
-      <header className="layout-header">
+     
+
+      {showHeader && (
+        <header className="layout-header">
         <Header />
       </header>
+      )}
+
       {showNavbar && (
         <nav className="layout-navbar">
           <Navbar />

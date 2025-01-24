@@ -21,7 +21,7 @@ const Home = () => {
   }, []);
 
   return (
-    <Layout showSidebar={true} showNavbar={true} showFooter={true}>
+    <Layout showHeader={true} showSidebar={true} showNavbar={true} showFooter={true}>
       <h2>Welcome to {role} Dashboard</h2>
     </Layout>
   );

@@ -21,7 +21,7 @@ const Setting = () => {
   }, []);
 
   return (
-    <Layout showSidebar={true} showNavbar={true} showFooter={true}>
+    <Layout showHeader={true} showSidebar={true} showNavbar={true} showFooter={true}>
       <h2>This is Setting Page</h2>
     </Layout>
   );
