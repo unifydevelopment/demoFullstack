@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 import {jwtDecode} from "jwt-decode"; // Ensure you have jwt-decode installed: npm install jwt-decode
 
 const ProtectedRoute = ({ children, requiredRole }) => {
-  const token = localStorage.getItem("token");
+const token = localStorage.getItem("token");
 
   if (!token) {
     // If no token is found, redirect to login
@@ -29,8 +29,8 @@ const ProtectedRoute = ({ children, requiredRole }) => {
     // If all checks pass, render the children
     return children;
   } catch (error) {
-    console.error("Error decoding token:", error);
-    return <Navigate to="/login" />;
+        console.error("Error decoding token:", error);
+        return <Navigate to="/login" />;
   }
 };
 

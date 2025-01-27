@@ -5,6 +5,7 @@ import Profile from "../pages/Profile";
 import Setting from "../pages/Setting";
 import Signup from "../components/Auth/Signup";
 import Login from "../components/Auth/Login";
+import User from "../pages/User";
 import AdminDashboard from "../components/AdminDashboard";
 import ProtectedRoute from "../pages/ProtectedRoute"; // Adjusted import path for ProtectedRoute
 
@@ -22,6 +23,14 @@ const RoutesFile = () => {
         element={
           <ProtectedRoute requiredRole="admin">
             <Profile />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/user"
+        element={
+          <ProtectedRoute requiredRole="admin">
+            <User />
           </ProtectedRoute>
         }
       />

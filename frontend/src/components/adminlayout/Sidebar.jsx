@@ -5,6 +5,7 @@ import '../../../src/styles/sidebar.css'; // Import the CSS for sidebar styling
 import { AiOutlineDashboard } from "react-icons/ai";
 import { FiSettings } from "react-icons/fi";
 import { SiPuma } from "react-icons/si";
+import { FaUser } from "react-icons/fa";
 
 
 const Sidebar = () => {
@@ -24,7 +25,16 @@ const Sidebar = () => {
             to="/settings"
             className={({ isActive }) => (isActive ? "active" : "")}
           >
-            <FiSettings /> Settings
+            <FiSettings/> Settings
+          </NavLink>
+        </li>
+
+        <li>
+          <NavLink
+            to="/user"
+            className={({ isActive }) => (isActive ? "active" : "")}
+          >
+            <FaUser/> User
           </NavLink>
         </li>
         <li>
@@ -32,7 +42,7 @@ const Sidebar = () => {
             to="/profile"
             className={({ isActive }) => (isActive ? "active" : "")}
           >
-            <SiPuma /> Profile
+            <SiPuma/> Profile
           </NavLink>
         </li>
       </ul>
