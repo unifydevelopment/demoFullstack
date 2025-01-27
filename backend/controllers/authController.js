@@ -6,9 +6,9 @@ const db = require('../config/db');
 const JWT_SECRET = process.env.JWT_SECRET;
 
 exports.register = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, role } = req.body;
 
-  if (!name || !email || !password) {
+  if (!name || !email || !password || !role) {
     return res.status(400).json({ message: 'All fields are required' });
   }
 
@@ -24,8 +24,8 @@ exports.register = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     await db.promise().query(
-      'INSERT INTO users (name, email, password) VALUES (?, ?, ?)',
-      [name, email, hashedPassword]
+      'INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)',
+      [name, email, hashedPassword, role]
     );
 
     res.status(201).json({ message: 'User registered successfully' });
@@ -43,8 +43,9 @@ exports.login = async (req, res) => {
   }
 
   try {
+    // Fetch the user from the database
     const [user] = await db.promise().query(
-      'SELECT * FROM users WHERE email = ?',
+      'SELECT id, password, role FROM users WHERE email = ?',
       [email]
     );
 
@@ -52,14 +53,27 @@ exports.login = async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
+    // Verify the password
     const validPassword = await bcrypt.compare(password, user[0].password);
     if (!validPassword) {
       return res.status(401).json({ message: 'Invalid password' });
     }
 
-    const token = jwt.sign({ id: user[0].id }, JWT_SECRET, { expiresIn: '1h' });
+    // Add user role to the JWT token
+    const token = jwt.sign(
+      {
+        id: user[0].id, // User ID
+        role: user[0].role // User Role
+      },
+      JWT_SECRET,
+      { expiresIn: '1h' }
+    );
 
-    res.status(200).json({ message: 'Login successful', token });
+    // Send token in response
+    res.status(200).json({
+      message: 'Login successful',
+      token: token // Include the token in the response
+    });
   } catch (err) {
     console.error('Error during login:', err.message);
     res.status(500).json({ message: 'Internal server error' });
