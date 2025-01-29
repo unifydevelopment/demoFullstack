@@ -2,10 +2,13 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Home from "../pages/Home";
 import Profile from "../pages/Profile";
+import CreateUser from "../pages/user/create";
+import EditUser from "../pages/user/edit";
 import Setting from "../pages/Setting";
 import Signup from "../components/Auth/Signup";
 import Login from "../components/Auth/Login";
-import User from "../pages/User";
+// import User from "../pages/User";
+import UserListing from "../pages/user/listing";
 import AdminDashboard from "../components/AdminDashboard";
 import ProtectedRoute from "../pages/ProtectedRoute"; // Adjusted import path for ProtectedRoute
 
@@ -13,11 +16,16 @@ const RoutesFile = () => {
   return (
     <Routes>
       {/* Public Routes */}
-      <Route path="/" element={<Home />} />
+      
       <Route path="/signup" element={<Signup />} />
       <Route path="/login" element={<Login />} />
       
       {/* Protected Routes */}
+
+      <Route path="/" element={<ProtectedRoute requiredRole="admin">
+            <Home />
+       </ProtectedRoute>} />
+
       <Route
         path="/profile"
         element={
@@ -30,7 +38,7 @@ const RoutesFile = () => {
         path="/user"
         element={
           <ProtectedRoute requiredRole="admin">
-            <User />
+            <UserListing />
           </ProtectedRoute>
         }
       />
@@ -50,7 +58,26 @@ const RoutesFile = () => {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/create-user"
+        element={
+          <ProtectedRoute requiredRole="admin">
+            < CreateUser/>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/edit-user/:id"
+        element={
+          <ProtectedRoute requiredRole="admin">
+            < EditUser/>
+          </ProtectedRoute>
+        }
+      />
     </Routes>
+
+    
   );
 };
 

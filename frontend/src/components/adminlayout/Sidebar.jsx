@@ -32,7 +32,7 @@ const Sidebar = () => {
         <li>
           <NavLink
             to="/user"
-            className={({ isActive }) => (isActive ? "active" : "")}
+            className={location.pathname.startsWith("/user") || location.pathname.startsWith("/create-user") ? "active" : ""}
           >
             <FaUser/> User
           </NavLink>

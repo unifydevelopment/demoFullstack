@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getUser } from "../api";
+import { getAllUsers } from "../api";
 
 const AdminDashboard = () => {
   const [user, setUser] = useState(null);
@@ -7,7 +7,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const { data } = await getUser();
+        const { data } = await getAllUsers();
         setUser(data);
       } catch (error) {
         console.error("Failed to fetch user:", error);
