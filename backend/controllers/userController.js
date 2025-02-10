@@ -2,6 +2,8 @@ const db = require('../config/db');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const multer = require("multer");
+const { registerSchema, loginSchema, updateUserSchema } = require('../validation/userValidation'); // Import Joi schemas
+
 const authenticateToken = require('../middlewares/authMiddleware'); // Import middleware
 
 // Configure Multer for image upload
@@ -24,9 +26,6 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-// Initialize upload middleware
-const upload = multer({ storage, fileFilter }).single("profile_image");
-
 // Function to create a new user
 exports.createNewUser = async (req, res) => {
   upload(req, res, async (err) => {
@@ -34,12 +33,14 @@ exports.createNewUser = async (req, res) => {
       return res.status(400).json({ message: err.message });
     }
 
+    // Validate user input using Joi
+    const { error } = registerSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
+    }
+
     const { name, email, password, role } = req.body;
     const profileImage = req.file ? req.file.filename : null; // Get uploaded image filename
-
-    if (!name || !email || !password || !role) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
 
     try {
       const [existingUser] = await db.promise().query(
@@ -66,6 +67,7 @@ exports.createNewUser = async (req, res) => {
   });
 };
 
+// Get all users
 exports.getAllUsers = async (req, res) => {
   try {
     const [users] = await db.promise().query('SELECT id, name, email, role FROM users ORDER BY id DESC');
@@ -76,22 +78,19 @@ exports.getAllUsers = async (req, res) => {
   }
 };
 
-
-// Edit user
+// Get user data by ID
 exports.getUserData = async (req, res) => {
   try {
-    const { id } = req.params;  // Get user ID from request parameters
+    const { id } = req.params;  
     const query = 'SELECT id, name, email, role FROM users WHERE id = ?';
 
-    // Execute the query to get user data
     const [user] = await db.promise().query(query, [id]);
 
     if (user.length === 0) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Respond with the user data
-    res.status(200).json(user[0]); // Send back the first user in the result
+    res.status(200).json(user[0]);
   } catch (err) {
     console.error('Error fetching user data:', err.message);
     res.status(500).json({ message: 'Internal server error' });
@@ -99,51 +98,58 @@ exports.getUserData = async (req, res) => {
 };
 
 // Update user
-
 exports.editUser = async (req, res) => {
   try {
-
     const { id } = req.params;
+
+    // Validate user input using Joi
+    const { error } = updateUserSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
+    }
+
     const { name, email, password } = req.body;
-    // console.log(req.params)
-    // console.log(req.body)
-    
-    const hashedPassword = await bcrypt.hash(password, 10);
+
+    let hashedPassword;
+    if (password) {
+      hashedPassword = await bcrypt.hash(password, 10);
+    }
+
     const query = 'UPDATE users SET name = ?, email = ?, password = ? WHERE id = ?';
     const [results] = await db.promise().query(query, [name, email, hashedPassword, id]);
 
     if (results.affectedRows === 0) {
       return res.status(404).json({ message: 'User not found' });
     }
-    res.status(200).json({ message: 'User updated' });
+
+    res.status(200).json({ message: 'User updated successfully' });
   } catch (err) {
     console.error('Error updating user:', err.message);
     res.status(500).json({ message: 'Failed to update user' });
   }
 };
 
-
-
 // Delete user
 exports.deleteUser = async (req, res) => {
   try {
-        const { id } = req.params;
-        const query = 'DELETE FROM users WHERE id = ?';
-      db.query(query, [id], (err, results) => {
-        if (err) {
-          console.error('Error deleting user:', err);
-          res.status(500).json({ message: 'Failed to delete user' });
-          return;
-        }
-        if (results.affectedRows === 0) {
-          res.status(404).json({ message: 'User not found' });
-          return;
-        }
-        res.status(200).json({ message: 'User deleted' });
-      });
+    const { id } = req.params;
+    const query = 'DELETE FROM users WHERE id = ?';
+
+    db.query(query, [id], (err, results) => {
+      if (err) {
+        console.error('Error deleting user:', err);
+        res.status(500).json({ message: 'Failed to delete user' });
+        return;
+      }
+      if (results.affectedRows === 0) {
+        res.status(404).json({ message: 'User not found' });
+        return;
+      }
+      res.status(200).json({ message: 'User deleted successfully' });
+    });
   } catch (err) {
-    console.error('Error updating user:', err.message);
-    res.status(500).json({ message: 'Failed to update user' });
+    console.error('Error deleting user:', err.message);
+    res.status(500).json({ message: 'Failed to delete user' });
   }
 };
 

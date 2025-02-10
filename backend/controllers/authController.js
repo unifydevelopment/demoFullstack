@@ -2,21 +2,24 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const db = require('../config/db');
-
+const { registerSchema, loginSchema } = require('../validation/userValidation'); // Import Joi validation schemas
 const JWT_SECRET = process.env.JWT_SECRET;
 
 exports.register = async (req, res) => {
-  const { name, email, password, role } = req.body;
-
-  if (!name || !email || !password || !role) {
-    return res.status(400).json({ message: 'All fields are required' });
+  // Validate request body using Joi
+  const { error } = registerSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
   }
+
+  const { name, email, password, role } = req.body;
 
   try {
     const [existingUser] = await db.promise().query(
       'SELECT * FROM users WHERE email = ?',
       [email]
     );
+
     if (existingUser.length > 0) {
       return res.status(400).json({ message: 'Email already registered' });
     }
@@ -36,14 +39,15 @@ exports.register = async (req, res) => {
 };
 
 exports.login = async (req, res) => {
-  const { email, password } = req.body;
-
-  if (!email || !password) {
-    return res.status(400).json({ message: 'Email and password are required' });
+  // Validate request body using Joi
+  const { error } = loginSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
   }
 
+  const { email, password } = req.body;
+
   try {
-    // Fetch the user from the database
     const [user] = await db.promise().query(
       'SELECT id, password, role FROM users WHERE email = ?',
       [email]
@@ -53,26 +57,20 @@ exports.login = async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Verify the password
     const validPassword = await bcrypt.compare(password, user[0].password);
     if (!validPassword) {
       return res.status(401).json({ message: 'Invalid password' });
     }
 
-    // Add user role to the JWT token
     const token = jwt.sign(
-      {
-        id: user[0].id, // User ID
-        role: user[0].role // User Role
-      },
+      { id: user[0].id, role: user[0].role },
       JWT_SECRET,
       { expiresIn: '1h' }
     );
 
-    // Send token in response
     res.status(200).json({
       message: 'Login successful',
-      token: token // Include the token in the response
+      token: token
     });
   } catch (err) {
     console.error('Error during login:', err.message);
