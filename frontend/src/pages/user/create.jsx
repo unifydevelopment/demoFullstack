@@ -3,6 +3,7 @@ import Layout from "../Layout";
 import { useNavigate } from "react-router-dom";
 import { createNewUser } from "../../api";
 import { toast } from "react-toastify";
+import { createUserSchema } from "../../validations/UserValidation"; // Import validation
 
 const User = () => {
   const navigate = useNavigate(); 
@@ -36,36 +37,16 @@ const User = () => {
   };
 
   const validateForm = () => {
-    const errors = {};
-    let valid = true;
-
-    if (!form.name.trim()) {
-      errors.name = "Name is required";
-      valid = false;
-    } else if (form.name.trim().length < 3) {
-      errors.name = "Name must be at least 3 characters";
-      valid = false;
+    const { error } = createUserSchema.validate(form, { abortEarly: false });
+    if (error) {
+      const errors = {};
+      error.details.forEach((err) => {
+        errors[err.path[0]] = err.message;
+      });
+      setErrors(errors);
+      return false;
     }
-
-    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    if (!form.email.trim()) {
-      errors.email = "Email is required";
-      valid = false;
-    } else if (!emailPattern.test(form.email)) {
-      errors.email = "Please enter a valid email address";
-      valid = false;
-    }
-
-    if (!form.password.trim()) {
-      errors.password = "Password is required";
-      valid = false;
-    } else if (form.password.trim().length < 6) {
-      errors.password = "Password must be at least 6 characters";
-      valid = false;
-    }
-
-    setErrors(errors);
-    return valid;
+    return true;
   };
 
   const handleSubmit = async (e) => {

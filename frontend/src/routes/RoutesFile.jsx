@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route,Navigate } from "react-router-dom";
 import Home from "../pages/Home";
 import Profile from "../pages/Profile";
 import CreateUser from "../pages/user/create";
@@ -11,14 +11,16 @@ import Login from "../components/Auth/Login";
 import UserListing from "../pages/user/listing";
 import AdminDashboard from "../components/AdminDashboard";
 import ProtectedRoute from "../pages/ProtectedRoute"; // Adjusted import path for ProtectedRoute
+import { isAuthenticated } from "../utils"; // Import Auth Utility
 
 const RoutesFile = () => {
   return (
     <Routes>
       {/* Public Routes */}
       
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/login" element={<Login />} />
+      {/* Redirect to dashboard if already logged in */}
+      <Route path="/signup" element={isAuthenticated() ? <Navigate to="/" /> : <Signup />} />
+      <Route path="/login" element={isAuthenticated() ? <Navigate to="/" /> : <Login />} />
       
       {/* Protected Routes */}
 
